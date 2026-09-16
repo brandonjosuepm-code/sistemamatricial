@@ -1,8 +1,8 @@
-
 # Etapa 1: Compilar el proyecto con Maven
 FROM eclipse-temurin:17-jdk-alpine AS build
 WORKDIR /app
 COPY . .
+RUN chmod +x mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Etapa 2: Ejecutar la aplicación
