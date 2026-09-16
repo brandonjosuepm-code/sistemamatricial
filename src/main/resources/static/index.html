@@ -1,62 +1,61 @@
 <!DOCTYPE html>
-
-<html>
-    <head>
-        <title>Sistema Matricial - Distribución de Medicamentos</title>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribución de Medicamentos</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f7f6; }
-        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; }
-        textarea { width: 100%; height: 200px; font-family: monospace; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        button { background: #3498db; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #2980b9; }
-        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 4px; overflow-x: auto; }
+        /* Aquí puedes poner después los estilos si quieres, o dejarlo así */
+        body {
+            font-family: Arial;
+            background: #eee;
+        }
+        .contenedor {
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            text-align: center;
+            border-radius: 10px;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 5px;
+        }
     </style>
-    </head>
-    <body>
-        <div class="container">
-        <h1>Optimización Matricial de Medicamentos</h1>
-        <p>Modifica el JSON de entrada según tus centros, medicamentos, disponibilidades y requerimientos:</p>
-        
-        <textarea id="jsonInput">{
-    "centros": ["Hospital Central", "Clinica Norte", "Centro Sur"],
-    "medicamentos": ["Paracetamol", "Ibuprofeno", "Amoxicilina"],
-    "disponibilidad": [500, 300, 200],
-    "requerimientos": [
-        [150, 100, 50],
-        [200, 150, 80],
-        [100, 50, 40]
-    ]
-}</textarea>
-        <br>
-        <button onclick="enviarDatos()">Procesar Distribución</button>
+</head>
+<body>
 
-        <h3>Resultado del Servidor:</h3>
-        <pre id="resultado">Esperando ejecución...</pre>
+    <div class="contenedor">
+        <h1>Distribución de Medicamentos</h1>
+        
+        <input id="centro" placeholder="Centro de salud">
+        <input id="medicamento" placeholder="Medicamento">
+        <input id="disponible" type="number" placeholder="Disponible">
+        <input id="necesario" type="number" placeholder="Necesario">
+        
+        <button onclick="calcular()">Calcular</button>
+        
+        <p id="resultado"></p>
     </div>
 
     <script>
-        async function enviarDatos() {
-            const url = '/api/sistemamatricial/procesar';
-            const jsonText = document.getElementById('jsonInput').value;
+        function calcular() {
+            let disponible = Number(
+                document.getElementById("disponible").value
+            );
+            
+            let necesario = Number(
+                document.getElementById("necesario").value
+            );
+            
+            let distribuir = Math.min(disponible, necesario);
+            let faltante = necesario - distribuir;
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: jsonText
-                });
-
-                const data = await response.json();
-                document.getElementById('resultado').innerText = JSON.stringify(data, null, 4);
-            } catch (error) {
-                document.getElementById('resultado').innerText = 'Error al conectar con el servidor: ' + error;
-            }
+            document.getElementById("resultado").innerHTML = 
+                "Distribuir: " + distribuir + "<br>Faltante: " + faltante;
         }
     </script>
-    </body>
+
+</body>
 </html>
